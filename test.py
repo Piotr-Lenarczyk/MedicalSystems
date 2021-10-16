@@ -1,1 +1,3 @@
-print("Test successful")
+print("Test started...")
+print("...")
+print("Test finished successfully!")
