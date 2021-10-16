@@ -1,3 +1,3 @@
 print("Test started...")
 print("...")
-XDprint("Test finished successfully!")
+print("Test finished successfully!")
