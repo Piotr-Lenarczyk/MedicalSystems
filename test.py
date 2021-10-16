@@ -1,3 +1,3 @@
 print("Test started...")
 print("...")
-print("Test finished successfully!")
+.Xprint("Test finished successfully!")
