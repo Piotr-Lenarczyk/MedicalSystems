@@ -21,32 +21,17 @@ class IsDoctorOrAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.is_doctor or request.user.is_staff
 
-    def has_object_permission(self, request, view, obj):
-        return request.user.is_doctor or request.user.is_staff
-
 
 class IsPatientOrAdmin(permissions.BasePermission):
 
     def has_permission(self, request, view):
         return request.user.is_patient or request.user.is_staff
 
-    def has_object_permission(self, request, view, obj):
-        return request.user.is_patient or request.user.is_staff
-
-
-class IsSpecificDoctor(permissions.BasePermission):
-
-    def has_object_permission(self, request, view, obj):
-        return obj.email == request.user.email or request.user.is_staff
-
-
-class IsSpecificPatient(permissions.BasePermission):
-
-    def has_object_permission(self, request, view, obj):
-        return obj.email == request.user.email or request.user.is_staff
-
 
 class IsResultForPatient(permissions.BasePermission):
 
+    def has_permission(self, request, view):
+        return request.user.is_patient
+
     def has_object_permission(self, request, view, obj):
-        return request.user.is_patient or request.user.is_staff
+        return request.user.is_patient and request.user.email == obj.target_patient.email

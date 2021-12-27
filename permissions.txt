@@ -1,0 +1,11 @@
+As of last edit the following permissions are granted:
+
+Administration staff can:
+- List out, create, retrieve, update, partially update and destroy any instance of a model
+
+Doctors can:
+- List out and retrieve any Patient instance
+- List out, retrieve and create any Result instance
+
+Patients can:
+- Retrieve instances of Results referring only to their own results

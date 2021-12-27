@@ -34,7 +34,15 @@ class DoctorViewSet(viewsets.ModelViewSet):
 class PatientViewSet(viewsets.ModelViewSet):
     queryset = Patient.objects.all()
     serializer_class = PatientSerializer
-    permission_classes = [IsAdminUser]
+
+    # A doctor can only see a list of all the patients and a specific patient instance
+    def get_permissions(self):
+        permission_classes = []
+        if self.action == 'list' or self.action == 'retrieve':
+            permission_classes = [IsDoctorOrAdmin]
+        else:
+            permission_classes = [IsAdminUser]
+        return [permission() for permission in permission_classes]
 
 
 class SpecializationViewSet(viewsets.ModelViewSet):
@@ -59,12 +67,14 @@ class ResultViewSet(viewsets.ModelViewSet):
     queryset = Result.objects.all()
     serializer_class = ResultSerializer
 
+    # Any doctor can create a visit
+    # A patient can only see their own results
     def get_permissions(self):
         permission_classes = []
         if self.action == 'create' or self.action == 'list':
             permission_classes = [IsDoctorOrAdmin]
         elif self.action == 'retrieve':
-            permission_classes = [IsResultForPatient]
+            permission_classes = [IsDoctorOrAdmin | IsResultForPatient]
         else:
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
