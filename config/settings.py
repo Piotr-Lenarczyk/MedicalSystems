@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
+    'django_q',
 ]
 
 AUTH_USER_MODEL = 'api.User'
@@ -141,3 +142,11 @@ REST_FRAMEWORK = {
 }
 
 REST_USE_JWT = True
+
+Q_CLUSTER = {
+    "name": "system",
+    "orm": "default",
+    "timeout": 40,
+    "retry": 50,
+    "catch-up": False,
+}

@@ -115,7 +115,7 @@ class VisitSerializer(serializers.HyperlinkedModelSerializer):
                   'leading_doctor']
 
     def get_price(self, instance):
-        return instance.fee * request_currency_rate(instance.visited_patient.user.country.currency)
+        return (1.0 / request_currency_rate(instance.leading_doctor.user.country.currency)) * instance.fee * request_currency_rate(instance.visited_patient.user.country.currency)
 
     def create(self, validated_data):
         data1 = validated_data.pop('visited_patient')
