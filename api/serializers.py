@@ -71,7 +71,7 @@ class DoctorSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Doctor
-        fields = ['doctor_id', 'email', 'user', 'specializations']
+        fields = ['id', 'email', 'user', 'specializations']
 
     def create(self, validated_data):
         data = validated_data.pop('user')
@@ -87,7 +87,7 @@ class PatientSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Patient
-        fields = ['patient_id', 'email', 'user', 'date_of_admission']
+        fields = ['id', 'email', 'user', 'date_of_admission']
 
     def create(self, validated_data):
         data = validated_data.pop('user')
@@ -99,7 +99,7 @@ class PatientSerializer(serializers.HyperlinkedModelSerializer):
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
-        fields = ['address_id', 'street', 'house_number', 'apartment_number', 'city', 'postal_code', 'state', 'country']
+        fields = ['id', 'street', 'house_number', 'apartment_number', 'city', 'postal_code', 'state', 'country']
 
 
 class VisitSerializer(serializers.HyperlinkedModelSerializer):
@@ -111,7 +111,7 @@ class VisitSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Visit
-        fields = ['visit_id', 'fee', 'price', 'visited_patient', 'date', 'time', 'location', 'required_specialization',
+        fields = ['id', 'fee', 'price', 'visited_patient', 'date', 'time', 'location', 'required_specialization',
                   'leading_doctor']
 
     def get_price(self, instance):
@@ -135,7 +135,7 @@ class VisitSerializer(serializers.HyperlinkedModelSerializer):
 class ResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = Result
-        fields = ['result_id', 'target_patient', 'subject', 'description']
+        fields = ['id', 'target_patient', 'subject', 'description']
 
 
 class CountrySerializer(serializers.ModelSerializer):

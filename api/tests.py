@@ -96,12 +96,12 @@ class AdvancedModelTestCase(TestCase):
                                                    city='Warsaw', zip='00-000', hospital_ward='ER')
         user_profile2 = UserProfile.objects.create(user=user2, title='Mr', address='Add2', country=country,
                                                    city='Warsaw', zip='00-000', hospital_ward='ER')
-        doctor = Doctor.objects.create(doctor_id=1, email=user1, user=user_profile1)
-        patient = Patient.objects.create(patient_id=1, email=user2, user=user_profile2, date_of_admission='2021-12-01')
+        doctor = Doctor.objects.create(email=user1, user=user_profile1)
+        patient = Patient.objects.create(email=user2, user=user_profile2, date_of_admission='2021-12-01')
         specialization = Specialization.objects.create(name='Neurology')
-        address = Address.objects.create(address_id=1, street='Street', house_number=10, apartment_number=20,
+        address = Address.objects.create(street='Street', house_number=10, apartment_number=20,
                                          city='Opole', postal_code='11-111', state='Upper Silesia', country='POL')
-        Visit.objects.create(visit_id=1, visited_patient=patient, date=datetime.date.today(), time=datetime.time(),
+        Visit.objects.create(visited_patient=patient, date=datetime.date.today(), time=datetime.time(),
                              location=address, required_specialization=specialization, leading_doctor=doctor)
 
     def testValidatePrerequisites(self):
@@ -111,30 +111,30 @@ class AdvancedModelTestCase(TestCase):
         self.assertEqual(Country.objects.get(country_assigned='POL').currency, 'PLN')
         self.assertEqual(User.objects.get(email='email1@email.com'), UserProfile.objects.get(address='Add1').user)
         self.assertEqual(User.objects.get(email='email2@email.com'), UserProfile.objects.get(address='Add2').user)
-        self.assertEqual(Doctor.objects.get(doctor_id=1).user, UserProfile.objects.get(address='Add1'))
-        self.assertEqual(Patient.objects.get(patient_id=1).date_of_admission, datetime.date(2021, 12, 1))
+        self.assertEqual(Doctor.objects.get(id=1).user, UserProfile.objects.get(address='Add1'))
+        self.assertEqual(Patient.objects.get(id=1).date_of_admission, datetime.date(2021, 12, 1))
         self.assertEqual(Specialization.objects.get(name='Neurology').name, 'Neurology')
-        self.assertEqual(Address.objects.get(address_id=1).state, 'Upper Silesia')
+        self.assertEqual(Address.objects.get(id=1).state, 'Upper Silesia')
 
     def testVisitCreation(self):
         """A new instance of Visit model was created successfully"""
-        self.assertEqual(Visit.objects.get(visit_id=1).visited_patient.date_of_admission, datetime.date(2021, 12, 1))
+        self.assertEqual(Visit.objects.get(id=1).visited_patient.date_of_admission, datetime.date(2021, 12, 1))
 
     def testVisitModification(self):
         """Specific attributes of a newly created instance of Visit model are changed successfully"""
-        visit = Visit.objects.get(visit_id=1)
+        visit = Visit.objects.get(id=1)
         visit.time = '09:00'
         self.assertEqual(visit.time, '09:00')
-        address = Address.objects.create(address_id=2, street='Avenue', house_number=50, apartment_number=30,
+        address = Address.objects.create(id=2, street='Avenue', house_number=50, apartment_number=30,
                                          city='Seattle', postal_code='22-222', state='Washington', country='USA')
         visit.location = address
         self.assertEqual(visit.location.state, 'Washington')
 
     def testVisitDeletion(self):
         """Newly created Visit is deleted successfully; trying to query for it raises DoesNotExist exception"""
-        Visit.objects.get(visit_id=1).delete()
+        Visit.objects.get(id=1).delete()
         try:
-            Visit.objects.get(visit_id=1)
+            Visit.objects.get(id=1)
         except Visit.DoesNotExist:
             self.assertTrue(True)
         else:
@@ -156,14 +156,14 @@ class PermissionTestCase(TestCase):
                                                    city='Warsaw', zip='00-000', hospital_ward='ER')
         user_profile2 = UserProfile.objects.create(user=user2, title='Mr', address='Add2', country=country,
                                                    city='Warsaw', zip='00-000', hospital_ward='ER')
-        doctor = Doctor.objects.create(doctor_id=1, email=user1, user=user_profile1)
-        patient = Patient.objects.create(patient_id=1, email=user2, user=user_profile2, date_of_admission='2021-12-01')
+        doctor = Doctor.objects.create(email=user1, user=user_profile1)
+        patient = Patient.objects.create(email=user2, user=user_profile2, date_of_admission='2021-12-01')
         specialization = Specialization.objects.create(name='Neurology')
-        address = Address.objects.create(address_id=1, street='Street', house_number=10, apartment_number=20,
+        address = Address.objects.create(street='Street', house_number=10, apartment_number=20,
                                          city='Opole', postal_code='11-111', state='Upper Silesia', country='POL')
-        Visit.objects.create(visit_id=1, visited_patient=patient, date=datetime.date.today(), time=datetime.time(),
+        Visit.objects.create(visited_patient=patient, date=datetime.date.today(), time=datetime.time(),
                              location=address, required_specialization=specialization, leading_doctor=doctor)
-        Result.objects.create(result_id=1, target_patient=patient, subject='Subject', description='This is a test.')
+        Result.objects.create(target_patient=patient, subject='Subject', description='This is a test.')
 
     def testValidatePrerequisites(self):
         """User has properly logged in"""
@@ -206,7 +206,7 @@ class PermissionTestCase(TestCase):
         # Partially update existing instance in a view
         response = client.patch('/api/results/1/', {'description': 'Another TEST'}, 'application/json')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(Result.objects.get(result_id=1).description, 'Another TEST')
+        self.assertEqual(Result.objects.get(id=1).description, 'Another TEST')
 
         response = client.get('/api/doctors/')
         self.assertEqual(response.status_code, 200)

@@ -48,29 +48,26 @@ class Specialization(models.Model):
 
 
 class Doctor(models.Model):
-    doctor_id = models.IntegerField(verbose_name='Doctor ID', primary_key=True)
     email = models.OneToOneField(User, on_delete=models.CASCADE, to_field='email')
     user = models.OneToOneField(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
     specializations = models.ManyToManyField(Specialization)
     objects = models.Manager()
 
     class Meta:
-        ordering = ['doctor_id']
+        ordering = ['id']
 
 
 class Patient(models.Model):
-    patient_id = models.IntegerField(verbose_name='Patient ID', primary_key=True)
     email = models.OneToOneField(User, on_delete=models.CASCADE, to_field='email')
     user = models.OneToOneField(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
     date_of_admission = models.DateField()
     objects = models.Manager()
 
     class Meta:
-        ordering = ['patient_id']
+        ordering = ['id']
 
 
 class Address(models.Model):
-    address_id = models.IntegerField(verbose_name='Address ID')
     street = models.CharField(max_length=50)
     house_number = models.IntegerField()
     apartment_number = models.IntegerField(blank=True, null=True)
@@ -85,7 +82,6 @@ class Address(models.Model):
 
 
 class Visit(models.Model):
-    visit_id = models.IntegerField(verbose_name='Visit ID', primary_key=True)
     visited_patient = models.ForeignKey(Patient, on_delete=models.CASCADE, unique=False)
     date = models.DateField()
     time = models.TimeField()
@@ -96,15 +92,14 @@ class Visit(models.Model):
     objects = models.Manager()
 
     class Meta:
-        ordering = ['visit_id']
+        ordering = ['id']
 
 
 class Result(models.Model):
-    result_id = models.IntegerField(verbose_name='Result ID', primary_key=True)
     target_patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     subject = models.CharField(max_length=50)
     description = models.CharField(max_length=1000)
     objects = models.Manager()
 
     class Meta:
-        ordering = ['result_id']
+        ordering = ['id']
