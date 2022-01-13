@@ -19,7 +19,7 @@ def request_currency_rate(currency):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ('title', 'address', 'country', 'city', 'zip', 'hospital_ward')
+        fields = ('title', 'address', 'hospital_ward')
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -50,9 +50,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         profile.is_patient = profile_data.get('is_patient', profile.is_patient)
         profile.title = profile_data.get('title', profile.title)
         profile.address = profile_data.get('address', profile.address)
-        profile.country = profile_data.get('country', profile.country)
-        profile.city = profile_data.get('city', profile.city)
-        profile.zip = profile_data.get('zip', profile.zip)
         profile.hospital_ward = profile_data.get('hospital_ward', profile.hospital_ward)
         profile.save()
 
@@ -62,38 +59,21 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class SpecializationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Specialization
-        fields = ['name']
+        fields = ['id', 'name']
 
 
 class DoctorSerializer(serializers.HyperlinkedModelSerializer):
-    user = UserProfileSerializer(required=True)
-    specializations = SpecializationSerializer(required=False)
 
     class Meta:
         model = Doctor
-        fields = ['id', 'email', 'user', 'specializations']
-
-    def create(self, validated_data):
-        data = validated_data.pop('user')
-        data2 = validated_data.pop('specializations')
-        user = UserProfileSerializer.create(UserProfileSerializer(), validated_data=data)
-        specializations = SpecializationSerializer.create(SpecializationSerializer(), data2)
-        doctor = Doctor.objects.update_or_create(user=user, specializations=specializations)
-        return doctor
+        fields = ['id', 'email', 'user']
 
 
 class PatientSerializer(serializers.HyperlinkedModelSerializer):
-    user = UserProfileSerializer(required=True)
 
     class Meta:
         model = Patient
-        fields = ['id', 'email', 'user', 'date_of_admission']
-
-    def create(self, validated_data):
-        data = validated_data.pop('user')
-        user = UserProfileSerializer.create(UserProfileSerializer(), validated_data=data)
-        patient = Patient.objects.update_or_create(user=user, date_of_admission=validated_data.pop('date_of_admission'))
-        return patient
+        fields = ['id', 'email', 'user', 'date_of_admission', 'is_hospitalized']
 
 
 class AddressSerializer(serializers.ModelSerializer):
@@ -115,7 +95,8 @@ class VisitSerializer(serializers.HyperlinkedModelSerializer):
                   'leading_doctor']
 
     def get_price(self, instance):
-        return (1.0 / request_currency_rate(instance.leading_doctor.user.country.currency)) * instance.fee * request_currency_rate(instance.visited_patient.user.country.currency)
+        return (1.0 / request_currency_rate(instance.leading_doctor.user.country.currency)) * instance.fee\
+               * request_currency_rate(instance.visited_patient.user.country.currency)
 
     def create(self, validated_data):
         data1 = validated_data.pop('visited_patient')
@@ -147,3 +128,44 @@ class CountrySerializer(serializers.ModelSerializer):
 
     def get_rate(self, instance):
         return request_currency_rate(instance.currency)
+
+
+class MedicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Medication
+        fields = ['name', 'dose_in_milligrams', 'dosage_daily', 'to_prescription']
+
+
+class PrescriptionSerializer(serializers.ModelSerializer):
+    medications = MedicationSerializer(many=True, required=False)
+
+    class Meta:
+        model = Prescription
+        fields = ['patient_id', 'medications']
+
+
+class StateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = State
+        fields = ['systolic_blood_pressure', 'diastolic_blood_pressure', 'heart_rate', 'blood_oxygen_level',
+                  'measurement_time', 'to_patient_state']
+
+
+class PatientStatesSerializer(serializers.ModelSerializer):
+    states = StateSerializer(many=True, required=False)
+
+    class Meta:
+        model = PatientStates
+        fields = ['patient_id', 'states']
+
+
+class IllnessSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Illness
+        fields = ['patient_id', 'name']
+
+
+class DischargeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Discharge
+        fields = ['patient_id', 'state', 'prescription', 'illness']

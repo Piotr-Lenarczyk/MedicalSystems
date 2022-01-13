@@ -89,18 +89,20 @@ class AdvancedModelTestCase(TestCase):
     # An advanced model is a model with at least one relation to another model
     def setUp(self):
         # Prerequisites
+        country = Country.objects.create(country_assigned='POL', currency='PLN')
+        address = Address.objects.create(street='Street', house_number=10, apartment_number=20,
+                                         city='Opole', postal_code='11-111', state='Upper Silesia', country=country)
+        address2 = Address.objects.create(street='Street2', house_number=20, apartment_number=34,
+                                          city='Warsaw', postal_code='00-890', state='Masovian', country=country)
         user1 = User.objects.create_user('User1', 'email1@email.com', 'password', is_doctor=True, is_patient=False)
         user2 = User.objects.create_user('User2', 'email2@email.com', 'password', is_doctor=False, is_patient=True)
-        country = Country.objects.create(country_assigned='POL', currency='PLN')
-        user_profile1 = UserProfile.objects.create(user=user1, title='Doc', address='Add1', country=country,
-                                                   city='Warsaw', zip='00-000', hospital_ward='ER')
-        user_profile2 = UserProfile.objects.create(user=user2, title='Mr', address='Add2', country=country,
-                                                   city='Warsaw', zip='00-000', hospital_ward='ER')
+        user_profile1 = UserProfile.objects.create(user=user1, title='Doc', address=address, hospital_ward='ER')
+        user_profile2 = UserProfile.objects.create(user=user2, title='Mr', address=address2,
+                                                   hospital_ward='General Care')
         doctor = Doctor.objects.create(email=user1, user=user_profile1)
-        patient = Patient.objects.create(email=user2, user=user_profile2, date_of_admission='2021-12-01')
+        patient = Patient.objects.create(email=user2, user=user_profile2, date_of_admission='2021-12-01',
+                                         is_hospitalized=True)
         specialization = Specialization.objects.create(name='Neurology')
-        address = Address.objects.create(street='Street', house_number=10, apartment_number=20,
-                                         city='Opole', postal_code='11-111', state='Upper Silesia', country='POL')
         Visit.objects.create(visited_patient=patient, date=datetime.date.today(), time=datetime.time(),
                              location=address, required_specialization=specialization, leading_doctor=doctor)
 
@@ -109,12 +111,15 @@ class AdvancedModelTestCase(TestCase):
         self.assertTrue(User.objects.get(email='email1@email.com').is_doctor)
         self.assertTrue(User.objects.get(email='email2@email.com').is_patient)
         self.assertEqual(Country.objects.get(country_assigned='POL').currency, 'PLN')
-        self.assertEqual(User.objects.get(email='email1@email.com'), UserProfile.objects.get(address='Add1').user)
-        self.assertEqual(User.objects.get(email='email2@email.com'), UserProfile.objects.get(address='Add2').user)
-        self.assertEqual(Doctor.objects.get(id=1).user, UserProfile.objects.get(address='Add1'))
+        self.assertEqual(Address.objects.get(id=1).state, 'Upper Silesia')
+        self.assertEqual(User.objects.get(email='email1@email.com'),
+                         UserProfile.objects.get(address=Address.objects.get(id=1)).user)
+        self.assertEqual(User.objects.get(email='email2@email.com'),
+                         UserProfile.objects.get(address=Address.objects.get(id=2)).user)
+        self.assertEqual(Doctor.objects.get(id=1).user,
+                         UserProfile.objects.get(address=Address.objects.get(city='Opole')))
         self.assertEqual(Patient.objects.get(id=1).date_of_admission, datetime.date(2021, 12, 1))
         self.assertEqual(Specialization.objects.get(name='Neurology').name, 'Neurology')
-        self.assertEqual(Address.objects.get(id=1).state, 'Upper Silesia')
 
     def testVisitCreation(self):
         """A new instance of Visit model was created successfully"""
@@ -122,11 +127,12 @@ class AdvancedModelTestCase(TestCase):
 
     def testVisitModification(self):
         """Specific attributes of a newly created instance of Visit model are changed successfully"""
+        country = Country.objects.create(country_assigned='USA', currency='USD')
         visit = Visit.objects.get(id=1)
         visit.time = '09:00'
         self.assertEqual(visit.time, '09:00')
-        address = Address.objects.create(id=2, street='Avenue', house_number=50, apartment_number=30,
-                                         city='Seattle', postal_code='22-222', state='Washington', country='USA')
+        address = Address.objects.create(street='Avenue', house_number=50, apartment_number=30,
+                                         city='Seattle', postal_code='22-222', state='Washington', country=country)
         visit.location = address
         self.assertEqual(visit.location.state, 'Washington')
 
@@ -145,22 +151,23 @@ class AdvancedModelTestCase(TestCase):
 class PermissionTestCase(TestCase):
     def setUp(self):
         # Prerequisites
+        country = Country.objects.create(country_assigned='POL', currency='PLN')
+        address = Address.objects.create(street='Street', house_number=10, apartment_number=20,
+                                         city='Opole', postal_code='11-111', state='Upper Silesia', country=country)
+        address2 = Address.objects.create(street='Street2', house_number=20, apartment_number=34,
+                                         city='Warsaw', postal_code='00-890', state='Masovian', country=country)
         User.objects.create_superuser('admin', 'admin@admin.com', 'password')
         user1 = User.objects.create_user('user1', 'email1@email.com', 'password', first_name='Doctor', last_name='One',
                                          is_doctor=True, is_patient=False)
         user2 = User.objects.create_user('user2', 'email2@email.com', 'password', first_name='Patient', last_name='One',
                                          is_doctor=False, is_patient=True)
-
-        country = Country.objects.create(country_assigned='POL', currency='PLN')
-        user_profile1 = UserProfile.objects.create(user=user1, title='Doc', address='Add1', country=country,
-                                                   city='Warsaw', zip='00-000', hospital_ward='ER')
-        user_profile2 = UserProfile.objects.create(user=user2, title='Mr', address='Add2', country=country,
-                                                   city='Warsaw', zip='00-000', hospital_ward='ER')
+        user_profile1 = UserProfile.objects.create(user=user1, title='Doc', address=address, hospital_ward='ER')
+        user_profile2 = UserProfile.objects.create(user=user2, title='Mr', address=address2,
+                                                   hospital_ward='General Care')
         doctor = Doctor.objects.create(email=user1, user=user_profile1)
-        patient = Patient.objects.create(email=user2, user=user_profile2, date_of_admission='2021-12-01')
+        patient = Patient.objects.create(email=user2, user=user_profile2, date_of_admission='2021-12-01',
+                                         is_hospitalized=True)
         specialization = Specialization.objects.create(name='Neurology')
-        address = Address.objects.create(street='Street', house_number=10, apartment_number=20,
-                                         city='Opole', postal_code='11-111', state='Upper Silesia', country='POL')
         Visit.objects.create(visited_patient=patient, date=datetime.date.today(), time=datetime.time(),
                              location=address, required_specialization=specialization, leading_doctor=doctor)
         Result.objects.create(target_patient=patient, subject='Subject', description='This is a test.')

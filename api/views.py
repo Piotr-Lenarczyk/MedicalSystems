@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
 
-import api.models
+from api.models import *
 from api.serializers import *
 from api.permissions import *
 
@@ -23,6 +23,12 @@ class UserViewSet(viewsets.ModelViewSet):
         else:
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
+
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
+    permission_classes = [IsAdminUser]
 
 
 class DoctorViewSet(viewsets.ModelViewSet):
@@ -83,4 +89,40 @@ class ResultViewSet(viewsets.ModelViewSet):
 class CountryViewSet(viewsets.ModelViewSet):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
+    permission_classes = [IsAdminUser]
+
+
+class PrescriptionViewSet(viewsets.ModelViewSet):
+    queryset = Prescription.objects.all()
+    serializer_class = PrescriptionSerializer
+    permission_classes = [IsAdminUser]
+
+
+class MedicationViewSet(viewsets.ModelViewSet):
+    queryset = Medication.objects.all()
+    serializer_class = MedicationSerializer
+    permission_classes = [IsAdminUser]
+
+
+class PatientStatesViewSet(viewsets.ModelViewSet):
+    queryset = PatientStates.objects.all()
+    serializer_class = PatientStatesSerializer
+    permission_classes = [IsAdminUser]
+
+
+class StateViewSet(viewsets.ModelViewSet):
+    queryset = State.objects.all()
+    serializer_class = StateSerializer
+    permission_classes = [IsAdminUser]
+
+
+class IllnessViewSet(viewsets.ModelViewSet):
+    queryset = Illness.objects.all()
+    serializer_class = IllnessSerializer
+    permission_classes = [IsAdminUser]
+
+
+class DischargeViewSet(viewsets.ModelViewSet):
+    queryset = Discharge.objects.all()
+    serializer_class = DischargeSerializer
     permission_classes = [IsAdminUser]
