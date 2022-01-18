@@ -19,6 +19,7 @@ router.register(r'medications', MedicationViewSet)
 router.register(r'patient_states', PatientStatesViewSet)
 router.register(r'states', StateViewSet)
 router.register(r'illnesses', IllnessViewSet)
+router.register(r'patient_illnesses', PatientIllnessesViewSet)
 router.register(r'discharges', DischargeViewSet)
 
 urlpatterns = [

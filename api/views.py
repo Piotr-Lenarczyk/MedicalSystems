@@ -122,6 +122,12 @@ class IllnessViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminUser]
 
 
+class PatientIllnessesViewSet(viewsets.ModelViewSet):
+    queryset = PatientIllnesses.objects.all()
+    serializer_class = PatientIllnessesSerializer
+    permission_classes = [IsAdminUser]
+
+
 class DischargeViewSet(viewsets.ModelViewSet):
     queryset = Discharge.objects.all()
     serializer_class = DischargeSerializer

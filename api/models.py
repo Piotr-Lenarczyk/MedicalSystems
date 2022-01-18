@@ -103,8 +103,17 @@ class Result(models.Model):
         ordering = ['id']
 
 
+class Discharge(models.Model):
+    patient_id = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    objects = models.Manager()
+
+    class Meta:
+        ordering = ['id']
+
+
 class Prescription(models.Model):
     patient_id = models.ForeignKey(Patient, on_delete=models.CASCADE, verbose_name='Belonging to patient')
+    to_discharge = models.ForeignKey(Discharge, related_name='prescriptions', on_delete=models.CASCADE, null=True, blank=True)
     objects = models.Manager()
 
     class Meta:
@@ -124,6 +133,7 @@ class Medication(models.Model):
 
 class PatientStates(models.Model):
     patient_id = models.ForeignKey(Patient, on_delete=models.CASCADE, verbose_name='State of patient')
+    to_discharge = models.ForeignKey(Discharge, related_name='states', on_delete=models.CASCADE, null=True, blank=True)
     objects = models.Manager()
 
     class Meta:
@@ -144,20 +154,20 @@ class State(models.Model):
         ordering = ['id']
 
 
-class Illness(models.Model):
-    patient_id = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50)
+class PatientIllnesses(models.Model):
+    patient_id = models.ForeignKey(Patient, on_delete=models.CASCADE, verbose_name='Illnesses of patient')
+    to_discharge = models.ForeignKey(Discharge, related_name='illnesses', on_delete=models.CASCADE, null=True, blank=True)
     objects = models.Manager()
 
     class Meta:
         ordering = ['id']
 
 
-class Discharge(models.Model):
+class Illness(models.Model):
     patient_id = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    state = models.ForeignKey(State, on_delete=models.CASCADE)
-    prescription = models.ForeignKey(Medication, on_delete=models.CASCADE)
-    illness = models.ForeignKey(Illness, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    to_patient_illness = models.ForeignKey(PatientIllnesses, related_name='illnesses', on_delete=models.CASCADE,
+                                           null=True, blank=True)
     objects = models.Manager()
 
     class Meta:

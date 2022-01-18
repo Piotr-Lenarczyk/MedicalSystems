@@ -141,7 +141,7 @@ class PrescriptionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Prescription
-        fields = ['patient_id', 'medications']
+        fields = ['patient_id', 'medications', 'to_discharge']
 
 
 class StateSerializer(serializers.ModelSerializer):
@@ -156,16 +156,28 @@ class PatientStatesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PatientStates
-        fields = ['patient_id', 'states']
+        fields = ['patient_id', 'states', 'to_discharge']
 
 
 class IllnessSerializer(serializers.ModelSerializer):
     class Meta:
         model = Illness
-        fields = ['patient_id', 'name']
+        fields = ['patient_id', 'name', 'to_patient_illness']
+
+
+class PatientIllnessesSerializer(serializers.ModelSerializer):
+    illnesses = IllnessSerializer(many=True, required=False)
+
+    class Meta:
+        model = PatientIllnesses
+        fields = ['patient_id', 'illnesses', 'to_discharge']
 
 
 class DischargeSerializer(serializers.ModelSerializer):
+    states = PatientStatesSerializer(many=True, required=False)
+    prescriptions = PrescriptionSerializer(many=True, required=False)
+    illnesses = PatientIllnessesSerializer(many=True, required=False)
+
     class Meta:
         model = Discharge
-        fields = ['patient_id', 'state', 'prescription', 'illness']
+        fields = ['patient_id', 'states', 'prescriptions', 'illnesses']
