@@ -80,23 +80,14 @@ class Patient(models.Model):
 
 
 class Visit(models.Model):
-    visited_patient = models.ForeignKey(Patient, on_delete=models.CASCADE, unique=False)
-    date = models.DateField()
-    time = models.TimeField()
-    location = models.ForeignKey(Address, on_delete=models.CASCADE, unique=False)
-    required_specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE, unique=False)
-    leading_doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, unique=False)
+    visited_patient = models.ForeignKey(Patient, on_delete=models.CASCADE, unique=False, null=True, blank=True)
+    date = models.DateField(null=True, blank=True)
+    time = models.TimeField(null=True, blank=True)
+    location = models.ForeignKey(Address, on_delete=models.CASCADE, unique=False, null=True, blank=True)
+    required_specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE, unique=False, null=True,
+                                                blank=True)
+    leading_doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, unique=False, null=True, blank=True)
     fee = models.FloatField(default=0.0)
-    objects = models.Manager()
-
-    class Meta:
-        ordering = ['id']
-
-
-class Result(models.Model):
-    target_patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    subject = models.CharField(max_length=50)
-    description = models.CharField(max_length=1000)
     objects = models.Manager()
 
     class Meta:
@@ -111,9 +102,22 @@ class Discharge(models.Model):
         ordering = ['id']
 
 
+class Recommendation(models.Model):
+    target_patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    subject = models.CharField(max_length=50)
+    description = models.CharField(max_length=1000)
+    to_discharge = models.ForeignKey(Discharge, related_name='recommendations', on_delete=models.CASCADE, null=True,
+                                     blank=True)
+    objects = models.Manager()
+
+    class Meta:
+        ordering = ['id']
+
+
 class Prescription(models.Model):
     patient_id = models.ForeignKey(Patient, on_delete=models.CASCADE, verbose_name='Belonging to patient')
-    to_discharge = models.ForeignKey(Discharge, related_name='prescriptions', on_delete=models.CASCADE, null=True, blank=True)
+    to_discharge = models.ForeignKey(Discharge, related_name='prescriptions', on_delete=models.CASCADE, null=True,
+                                     blank=True)
     objects = models.Manager()
 
     class Meta:
@@ -133,7 +137,6 @@ class Medication(models.Model):
 
 class PatientStates(models.Model):
     patient_id = models.ForeignKey(Patient, on_delete=models.CASCADE, verbose_name='State of patient')
-    to_discharge = models.ForeignKey(Discharge, related_name='states', on_delete=models.CASCADE, null=True, blank=True)
     objects = models.Manager()
 
     class Meta:

@@ -69,9 +69,9 @@ class VisitViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminUser]
 
 
-class ResultViewSet(viewsets.ModelViewSet):
-    queryset = Result.objects.all()
-    serializer_class = ResultSerializer
+class RecommendationViewSet(viewsets.ModelViewSet):
+    queryset = Recommendation.objects.all()
+    serializer_class = RecommendationSerializer
 
     # Any doctor can create a visit
     # A patient can only see their own results

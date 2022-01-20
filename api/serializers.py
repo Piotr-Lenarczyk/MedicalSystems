@@ -62,14 +62,14 @@ class SpecializationSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 
-class DoctorSerializer(serializers.HyperlinkedModelSerializer):
+class DoctorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Doctor
         fields = ['id', 'email', 'user']
 
 
-class PatientSerializer(serializers.HyperlinkedModelSerializer):
+class PatientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Patient
@@ -82,11 +82,8 @@ class AddressSerializer(serializers.ModelSerializer):
         fields = ['id', 'street', 'house_number', 'apartment_number', 'city', 'postal_code', 'state', 'country']
 
 
-class VisitSerializer(serializers.HyperlinkedModelSerializer):
-    visited_patient = PatientSerializer(required=True)
-    location = AddressSerializer(required=False)
-    required_specialization = SpecializationSerializer(required=False)
-    leading_doctor = DoctorSerializer(required=True)
+class VisitSerializer(serializers.ModelSerializer):
+    #required_specialization = SpecializationSerializer(required=False)
     price = serializers.SerializerMethodField()
 
     class Meta:
@@ -95,28 +92,20 @@ class VisitSerializer(serializers.HyperlinkedModelSerializer):
                   'leading_doctor']
 
     def get_price(self, instance):
-        return (1.0 / request_currency_rate(instance.leading_doctor.user.country.currency)) * instance.fee\
-               * request_currency_rate(instance.visited_patient.user.country.currency)
+        return (1.0 / request_currency_rate(instance.leading_doctor.user.address.country.currency)) * instance.fee\
+               * request_currency_rate(instance.visited_patient.user.address.country.currency)
 
-    def create(self, validated_data):
-        data1 = validated_data.pop('visited_patient')
-        data2 = validated_data.pop('location')
-        data3 = validated_data.pop('required_specialization')
-        data4 = validated_data.pop('leading_doctor')
-        visited_patient = PatientSerializer.create(PatientSerializer(), validated_data=data1)
-        location = AddressSerializer.create(AddressSerializer(), validated_data=data2)
-        required_specialization = SpecializationSerializer.create(SpecializationSerializer(), validated_data=data3)
-        leading_doctor = DoctorSerializer.create(DoctorSerializer(), validated_data=data4)
-        visit = Visit.objects.update_or_create(visited_patient=visited_patient, location=location,
-                                               required_specialization=required_specialization,
-                                               leading_doctor=leading_doctor)
-        return visit
+    #def create(self, validated_data):
+    #    data = validated_data.pop('required_specialization')
+    #    required_specialization = SpecializationSerializer.create(SpecializationSerializer(), validated_data=data)
+    #    visit = Visit.objects.update_or_create(required_specialization=required_specialization, *validated_data)
+    #    return visit
 
 
-class ResultSerializer(serializers.ModelSerializer):
+class RecommendationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Result
-        fields = ['id', 'target_patient', 'subject', 'description']
+        model = Recommendation
+        fields = ['id', 'target_patient', 'subject', 'description', 'to_discharge']
 
 
 class CountrySerializer(serializers.ModelSerializer):
@@ -156,7 +145,7 @@ class PatientStatesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PatientStates
-        fields = ['patient_id', 'states', 'to_discharge']
+        fields = ['patient_id', 'states']
 
 
 class IllnessSerializer(serializers.ModelSerializer):
@@ -174,10 +163,10 @@ class PatientIllnessesSerializer(serializers.ModelSerializer):
 
 
 class DischargeSerializer(serializers.ModelSerializer):
-    states = PatientStatesSerializer(many=True, required=False)
     prescriptions = PrescriptionSerializer(many=True, required=False)
     illnesses = PatientIllnessesSerializer(many=True, required=False)
+    recommendations = RecommendationSerializer(many=True, required=False)
 
     class Meta:
         model = Discharge
-        fields = ['patient_id', 'states', 'prescriptions', 'illnesses']
+        fields = ['patient_id', 'prescriptions', 'illnesses', 'recommendations']

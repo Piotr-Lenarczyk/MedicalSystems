@@ -170,7 +170,7 @@ class PermissionTestCase(TestCase):
         specialization = Specialization.objects.create(name='Neurology')
         Visit.objects.create(visited_patient=patient, date=datetime.date.today(), time=datetime.time(),
                              location=address, required_specialization=specialization, leading_doctor=doctor)
-        Result.objects.create(target_patient=patient, subject='Subject', description='This is a test.')
+        Recommendation.objects.create(target_patient=patient, subject='Subject', description='This is a test.')
 
     def testValidatePrerequisites(self):
         """User has properly logged in"""
@@ -207,13 +207,13 @@ class PermissionTestCase(TestCase):
         response = client.get('/api/users/1/')
         self.assertEqual(response.status_code, 200)
         # Create a new instance in a view
-        response = client.post('/api/results/', {'result_id': 2, 'target_patient': 1, 'subject': 'Subject2',
-                                                 'description': 'Another test'})
+        response = client.post('/api/recommendations/', {'result_id': 2, 'target_patient': 1, 'subject': 'Subject2',
+                                                         'description': 'Another test'})
         self.assertEqual(response.status_code, 201)
         # Partially update existing instance in a view
-        response = client.patch('/api/results/1/', {'description': 'Another TEST'}, 'application/json')
+        response = client.patch('/api/recommendations/1/', {'description': 'Another TEST'}, 'application/json')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(Result.objects.get(id=1).description, 'Another TEST')
+        self.assertEqual(Recommendation.objects.get(id=1).description, 'Another TEST')
 
         response = client.get('/api/doctors/')
         self.assertEqual(response.status_code, 200)
@@ -228,8 +228,8 @@ class PermissionTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         response = client.get('/api/patients/1/')
         self.assertEqual(response.status_code, 200)
-        response = client.post('/api/results/', {'result_id': 3, 'target_patient': 1, 'subject': 'Subject3',
-                                                 'description': 'Yet another test'})
+        response = client.post('/api/recommendations/', {'result_id': 3, 'target_patient': 1, 'subject': 'Subject3',
+                                                         'description': 'Yet another test'})
         self.assertEqual(response.status_code, 201)
         # Access should be denied, returning a 403 Forbidden status code
         response = client.get('/api/users/')
@@ -243,14 +243,14 @@ class PermissionTestCase(TestCase):
         # Access view as patient
         client.login(username='email2@email.com', password='password')
         # Access should be granted, returning a 200 OK status code
-        response = client.get('/api/results/1/')
+        response = client.get('/api/recommendations/1/')
         self.assertEqual(response.status_code, 200)
         # Access should be denied, returning a 403 Forbidden status code
         response = client.get('/api/doctors/')
         self.assertEqual(response.status_code, 403)
         response = client.get('/api/doctors/1/')
         self.assertEqual(response.status_code, 403)
-        response = client.post('/api/results/', {'result_id': 4, 'target_patient': 1, 'subject': 'Subject4',
+        response = client.post('/api/recommendations/', {'result_id': 4, 'target_patient': 1, 'subject': 'Subject4',
                                                  'description': 'Yet again, another test'})
         self.assertEqual(response.status_code, 403)
         client.logout()
