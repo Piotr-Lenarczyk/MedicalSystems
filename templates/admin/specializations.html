@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<p>Hello, {{request.user.username}}!</p>
+<p>Specialization List</p>
+<table border="1px solid black" style="width:50%">
+    <th>Name</th>
+    {% for item in model %}
+    <tr>
+        <td>{{item.name}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock content %}

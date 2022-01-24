@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<p>Hello, {{request.user.username}}!</p>
+<p>User List</p>
+<table border="1px solid black" style="width:50%">
+    <th>Username</th>
+    <th>E-Mail</th>
+    <th>Doctor?</th>
+    <th>Patient?</th>
+    <th>Staff?</th>
+    {% for item in model %}
+    <tr>
+        <td>{{item.username}}</td>
+        <td>{{item.email}}</td>
+        <td>{{item.is_doctor}}</td>
+        <td>{{item.is_patient}}</td>
+        <td>{{item.is_staff}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock content %}

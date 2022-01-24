@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<p>Hello, {{request.user.username}}!</p>
+<p>Recommendation List</p>
+<table border="1px solid black" style="width:50%">
+    <th>Patient</th>
+    <th>Subject</th>
+    <th>Description</th>
+    <th>Related to discharge</th>
+    {% for item in model %}
+    <tr>
+        <td>{{item.target_patient.email.id}}</td>
+        <td>{{item.subject}}</td>
+        <td>{{item.description}}</td>
+        <td>{{item.to_discharge.id}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock content %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<p>Hello, {{request.user.username}}!</p>
+<p>Address List</p>
+<table border="1px solid black" style="width:50%">
+    <th>Street</th>
+    <th>House Number</th>
+    <th>Apartment Number</th>
+    <th>City</th>
+    <th>Postal Code</th>
+    <th>State</th>
+    <th>Country</th>
+    {% for item in model %}
+    <tr>
+        <td>{{item.street}}</td>
+        <td>{{item.house_number}}</td>
+        <td>{{item.apartment_number}}</td>
+        <td>{{item.city}}</td>
+        <td>{{item.postal_code}}</td>
+        <td>{{item.state}}</td>
+        <td>{{item.country.country_assigned}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock content %}

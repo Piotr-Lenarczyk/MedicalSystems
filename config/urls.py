@@ -16,11 +16,34 @@ Including another URLconf
 from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path
-from api.views import home_view, test_view
+from api.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
     path('home/', home_view, name='home'),
     path('test/', test_view, name='test'),
+    path('administrator/countries/', admin_country_view),
+    path('administrator/addresses/', admin_address_view),
+    path('administrator/users/', admin_user_view),
+    path('administrator/user_profiles/', admin_user_profile_view),
+    path('administrator/specializations/', admin_specialization_view),
+    path('administrator/doctors/', admin_doctor_view),
+    path('administrator/patients/', admin_patient_view),
+    path('administrator/visits/', admin_visit_view),
+    path('administrator/discharges/', admin_discharge_view),
+    path('administrator/recommendations/', admin_recommendation_view),
+    path('administrator/prescriptions/', admin_prescription_view),
+    path('administrator/medications/', admin_medication_view),
+    path('administrator/patient_states/', admin_patient_states_view),
+    path('administrator/states/', admin_states_view),
+    path('administrator/patient_illnesses/', admin_patient_illnesses_view),
+    path('administrator/illnesses/', admin_illnesses_view),
+    path('doctor/patients/', doctor_patient_view),
+    path('doctor/visits/', doctor_visit_view),
+    path('doctor/recommendations/', doctor_recommendation_view),
+    path('doctor/prescriptions/', doctor_prescription_view),
+    path('doctor/patient_states/', doctor_patient_states_view),
+    path('doctor/patient_illnesses/', admin_patient_illnesses_view),
+    path('patient/discharges/', patient_discharge_view),
 ]

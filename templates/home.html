@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{title}}</h1>
+        {% if not request.user.is_authenticated %}
+            <p><a href="http://127.0.0.1:8000/api/auth/login/?next=/api/">Login</a></p>
+        {% else %}
+            <p>Hello, {{request.user.username}}!</p>
+        {% endif %}
+        <p>You are accessing this page as {{access}}.</p>
+        {% if request.user.is_authenticated %}
+            {% if request.user.is_staff %}
+                <p><a href="http://127.0.0.1:8000/administrator/countries/">Country List</a></p>
+                <p><a href="http://127.0.0.1:8000/administrator/addresses/">Address List</a></p>
+                <p><a href="http://127.0.0.1:8000/administrator/users/">User List</a></p>
+                <p><a href="http://127.0.0.1:8000/administrator/user_profiles/">User Profile List</a></p>
+                <p><a href="http://127.0.0.1:8000/administrator/specializations/">Specialization List</a></p>
+                <p><a href="http://127.0.0.1:8000/administrator/doctors/">Doctor List</a></p>
+                <p><a href="http://127.0.0.1:8000/administrator/patients/">Patient List</a></p>
+                <p><a href="http://127.0.0.1:8000/administrator/visits/">Visit List</a></p>
+                <p><a href="http://127.0.0.1:8000/administrator/discharges/">Discharge List</a></p>
+                <p><a href="http://127.0.0.1:8000/administrator/recommendations/">Recommendation List</a></p>
+                <p><a href="http://127.0.0.1:8000/administrator/prescriptions/">Prescription List</a></p>
+                <p><a href="http://127.0.0.1:8000/administrator/medications/">Medication List</a></p>
+                <p><a href="http://127.0.0.1:8000/administrator/patient_states/">Patient States List</a></p>
+                <p><a href="http://127.0.0.1:8000/administrator/states/">States List</a></p>
+                <p><a href="http://127.0.0.1:8000/administrator/patient_illnesses/">Patient Illnesses List</a></p>
+                <p><a href="http://127.0.0.1:8000/administrator/illnesses/">Illnesses List</a></p>
+            {% elif request.user.is_doctor %}
+                <p><a href="http://127.0.0.1:8000/doctor/patients/">Patient List</a>
+                <p><a href="http://127.0.0.1:8000/doctor/visits/">Visit List</a></p>
+                <p><a href="http://127.0.0.1:8000/doctor/recommendations/">Recommendation List</a></p>
+                <p><a href="http://127.0.0.1:8000/doctor/prescriptions/">Prescription List</a></p>
+                <p><a href="http://127.0.0.1:8000/doctor/patient_states/">Patient States List</a></p>
+                <p><a href="http://127.0.0.1:8000/administrator/patient_illnesses/">Patient Illnesses List</a></p>
+            {% elif request.user.is_patient %}
+                <p><a href="http://127.0.0.1:8000/patient/discharges/">Discharge</a></p>
+        {% endif %}
+    {% endif %}
+{% endblock content %}

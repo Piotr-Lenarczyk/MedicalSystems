@@ -136,15 +136,229 @@ class DischargeViewSet(viewsets.ModelViewSet):
 
 
 def home_view(request, *args, **kwargs):
+    privilege_level = ""
+    if not request.user.is_authenticated:
+        privilege_level = "an anonymous user"
+    else:
+        if request.user.is_staff:
+            privilege_level = "an administation staff member"
+        elif request.user.is_doctor:
+            privilege_level = "a medical staff member"
+        elif request.user.is_patient:
+            privilege_level = "a patient"
     context = {
         "title": "Home Page",
         "list": [1, 2, 3, 4, 5],
+        "access": privilege_level
     }
     return render(request, "home.html", context)
 
 
 def test_view(request, *args, **kwargs):
+    addresses = Address.objects.all()
     context = {
-        "title": "Test Page"
+        "model": addresses,
     }
     return render(request, "test.html", context)
+
+
+def admin_country_view(request, *args, **kwargs):
+    data = Country.objects.all()
+    context = {
+        "model": data,
+    }
+    return render(request, "admin/countries.html", context)
+
+
+def admin_address_view(request, *args, **kwargs):
+    data = Address.objects.all()
+    context = {
+        "model": data,
+    }
+    return render(request, "admin/addresses.html", context)
+
+
+def admin_user_view(request, *args, **kwargs):
+    data = User.objects.all()
+    context = {
+        "model": data,
+    }
+    return render(request, "admin/users.html", context)
+
+
+def admin_user_profile_view(request, *args, **kwargs):
+    data = UserProfile.objects.all()
+    context = {
+        "model": data,
+    }
+    return render(request, "admin/user_profiles.html", context)
+
+
+def admin_specialization_view(request, *args, **kwargs):
+    data = Specialization.objects.all()
+    context = {
+        "model": data,
+    }
+    return render(request, "admin/specializations.html", context)
+
+
+def admin_doctor_view(request, *args, **kwargs):
+    data = Doctor.objects.all()
+    context = {
+        "model": data,
+    }
+    return render(request, "admin/doctors.html", context)
+
+
+def admin_patient_view(request, *args, **kwargs):
+    data = Patient.objects.all()
+    context = {
+        "model": data,
+    }
+    return render(request, "admin/patients.html", context)
+
+
+def admin_visit_view(request, *args, **kwargs):
+    data = Visit.objects.all()
+    context = {
+        "model": data,
+    }
+    return render(request, "admin/visits.html", context)
+
+
+def admin_discharge_view(request, *args, **kwargs):
+    data = Discharge.objects.all()
+    context = {
+        "model": data,
+    }
+    return render(request, "admin/discharges.html", context)
+
+
+def admin_recommendation_view(request, *args, **kwargs):
+    data = Recommendation.objects.all()
+    context = {
+        "model": data,
+    }
+    return render(request, "admin/recommendations.html", context)
+
+
+def admin_prescription_view(request, *args, **kwargs):
+    data = Prescription.objects.all()
+    medications = Medication.objects.all()
+    context = {
+        "model": data,
+        "medications": medications,
+    }
+    return render(request, "admin/prescriptions.html", context)
+
+
+def admin_medication_view(request, *args, **kwargs):
+    data = Medication.objects.all()
+    context = {
+        "model": data,
+    }
+    return render(request, "admin/medications.html", context)
+
+
+def admin_patient_states_view(request, *args, **kwargs):
+    data = PatientStates.objects.all()
+    states = State.objects.all()
+    context = {
+        "model": data,
+        "states": states,
+    }
+    return render(request, "admin/patient_states.html", context)
+
+
+def admin_states_view(request, *args, **kwargs):
+    data = State.objects.all()
+    context = {
+        "model": data,
+    }
+    return render(request, "admin/states.html", context)
+
+
+def admin_patient_illnesses_view(request, *args, **kwargs):
+    data = PatientIllnesses.objects.all()
+    illnesses = Illness.objects.all()
+    context = {
+        "model": data,
+        "illnesses": illnesses
+    }
+    return render(request, "admin/patient_illnesses.html", context)
+
+
+def admin_illnesses_view(request, *args, **kwargs):
+    data = Illness.objects.all()
+    context = {
+        "model": data,
+    }
+    return render(request, "admin/illnesses.html", context)
+
+
+def doctor_patient_view(request, *args, **kwargs):
+    data = Patient.objects.all()
+    context = {
+        "model": data,
+    }
+    return render(request, "doctor/patients.html", context)
+
+
+def doctor_visit_view(request, *args, **kwargs):
+    data = Visit.objects.filter(leading_doctor__email=request.user.email)
+    context = {
+        "model": data,
+    }
+    return render(request, "doctor/visits.html", context)
+
+
+def doctor_recommendation_view(request, *args, **kwargs):
+    data = Recommendation.objects.all()
+    context = {
+        "model": data,
+    }
+    return render(request, "doctor/recommendations.html", context)
+
+
+def doctor_prescription_view(request, *args, **kwargs):
+    data = Prescription.objects.all()
+    medications = Medication.objects.all()
+    context = {
+        "model": data,
+        "medications": medications,
+    }
+    return render(request, "doctor/prescriptions.html", context)
+
+
+def doctor_patient_states_view(request, *args, **kwargs):
+    data = PatientStates.objects.all()
+    states = State.objects.all()
+    context = {
+        "model": data,
+        "states": states,
+    }
+    return render(request, "doctor/patient_states.html", context)
+
+
+def doctor_patient_illnesses_view(request, *args, **kwargs):
+    data = PatientIllnesses.objects.all()
+    illnesses = Illness.objects.all()
+    context = {
+        "model": data,
+        "illnesses": illnesses
+    }
+    return render(request, "doctor/patient_illnesses.html", context)
+
+
+def patient_discharge_view(request, *args, **kwargs):
+    data = Discharge.objects.filter(patient_id__email=request.user.email)
+    medications = Medication.objects.filter(to_prescription__patient_id__email=request.user.email)
+    illnesses = Illness.objects.filter(patient_id__email=request.user.email)
+    recommendations = Recommendation.objects.filter(target_patient_id__email=request.user.email)
+    context = {
+        "model": data,
+        "medications": medications,
+        "illnesses": illnesses,
+        "recommendations": recommendations,
+    }
+    return render(request, "patient/discharges.html", context)

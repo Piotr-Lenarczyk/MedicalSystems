@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<p>Hello, {{request.user.username}}!</p>
+<p>State List</p>
+<table border="1px solid black" style="width:50%">
+    <th>Systolic Blood Pressure</th>
+    <th>Diastolic Blood Pressure</th>
+    <th>Heart Rate</th>
+    <th>Blood Oxygen Level</th>
+    <th>Measurement Time</th>
+    <th>Related to patient state</th>
+    {% for item in model %}
+    <tr>
+        <td>{{item.systolic_blood_pressure}}</td>
+        <td>{{item.diastolic_blood_pressure}}</td>
+        <td>{{item.heart_rate}}</td>
+        <td>{{item.blood_oxygen_level}}</td>
+        <td>{{item.measurement_time}}</td>
+        <td>{{item.to_patient_state.id}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock content %}

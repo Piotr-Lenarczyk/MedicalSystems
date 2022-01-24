@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<p>Hello, {{request.user.username}}!</p>
+<p>Visit List</p>
+<table border="1px solid black" style="width:50%">
+    <th>Patient ID</th>
+    <th>Data</th>
+    <th>Time</th>
+    <th>Location</th>
+    <th>Specialization</th>
+    <th>Doctor ID</th>
+    <th>Fee</th>
+    {% for item in model %}
+    <tr>
+        <td>{{item.visited_patient.id}}</td>
+        <td>{{item.date}}</td>
+        <td>{{item.time}}</td>
+        <td>{{item.location.postal_code}}</td>
+        <td>{{item.required_specialization}}</td>
+        <td>{{item.leading_doctor.id}}</td>
+        <td>{{item.fee}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock content %}

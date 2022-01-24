@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<p>Hello, {{request.user.username}}!</p>
+<p>Patient Illnesses List</p>
+<table border="1px solid black" style="width:50%">
+    <th>Patient ID</th>
+    <th>Related to discharge</th>
+    {% for item in model %}
+    <tr>
+        <td>{{item.patient_id.id}}</td>
+        <td>{{item.to_discharge.id}}</td>
+    </tr>
+    {% endfor %}
+</table>
+<p>Illnesses List</p>
+<table border="1px solid black" style="width:50%">
+    <th>Patient</th>
+    <th>Name</th>
+    <th>Related to patient illness</th>
+    {% for item in illnesses %}
+    <tr>
+        <td>{{item.patient_id.id}}</td>
+        <td>{{item.name}}</td>
+        <td>{{item.to_patient_illness.id}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock content %}

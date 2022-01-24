@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<p>Hello, {{request.user.username}}!</p>
+<p>Country List</p>
+<table border="1px solid black" style="width:50%">
+    <th>Country</th>
+    <th>Currency</th>
+    <th>Last Update</th>
+    {% for item in model %}
+    <tr>
+        <td>{{item.country_assigned}}</td>
+        <td>{{item.currency}}</td>
+        <td>{{item.last_update}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock content %}
