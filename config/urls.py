@@ -16,9 +16,11 @@ Including another URLconf
 from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path
-from api.urls import router as api_router
+from api.views import home_view, test_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
+    path('home/', home_view, name='home'),
+    path('test/', test_view, name='test'),
 ]

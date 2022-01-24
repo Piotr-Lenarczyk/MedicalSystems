@@ -83,7 +83,6 @@ class AddressSerializer(serializers.ModelSerializer):
 
 
 class VisitSerializer(serializers.ModelSerializer):
-    #required_specialization = SpecializationSerializer(required=False)
     price = serializers.SerializerMethodField()
 
     class Meta:
@@ -94,12 +93,6 @@ class VisitSerializer(serializers.ModelSerializer):
     def get_price(self, instance):
         return (1.0 / request_currency_rate(instance.leading_doctor.user.address.country.currency)) * instance.fee\
                * request_currency_rate(instance.visited_patient.user.address.country.currency)
-
-    #def create(self, validated_data):
-    #    data = validated_data.pop('required_specialization')
-    #    required_specialization = SpecializationSerializer.create(SpecializationSerializer(), validated_data=data)
-    #    visit = Visit.objects.update_or_create(required_specialization=required_specialization, *validated_data)
-    #    return visit
 
 
 class RecommendationSerializer(serializers.ModelSerializer):

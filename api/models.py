@@ -144,8 +144,10 @@ class PatientStates(models.Model):
 
 
 class State(models.Model):
-    systolic_blood_pressure = models.IntegerField(default=120, validators=[MinValueValidator(20), MaxValueValidator(400)])
-    diastolic_blood_pressure = models.IntegerField(default=80, validators=[MinValueValidator(20), MaxValueValidator(400)])
+    systolic_blood_pressure = models.IntegerField(default=120, validators=[MinValueValidator(20),
+                                                                           MaxValueValidator(400)])
+    diastolic_blood_pressure = models.IntegerField(default=80, validators=[MinValueValidator(20),
+                                                                           MaxValueValidator(400)])
     heart_rate = models.IntegerField(default=80, validators=[MinValueValidator(30), MaxValueValidator(220)])
     blood_oxygen_level = models.IntegerField(default=97, validators=[MinValueValidator(65), MaxValueValidator(100)],
                                              verbose_name='Blood oxygen saturation in %')
@@ -159,7 +161,8 @@ class State(models.Model):
 
 class PatientIllnesses(models.Model):
     patient_id = models.ForeignKey(Patient, on_delete=models.CASCADE, verbose_name='Illnesses of patient')
-    to_discharge = models.ForeignKey(Discharge, related_name='illnesses', on_delete=models.CASCADE, null=True, blank=True)
+    to_discharge = models.ForeignKey(Discharge, related_name='illnesses', on_delete=models.CASCADE, null=True,
+                                     blank=True)
     objects = models.Manager()
 
     class Meta:

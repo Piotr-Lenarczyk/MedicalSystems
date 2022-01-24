@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
 
@@ -9,7 +10,7 @@ from api.permissions import *
 
 # Create your views here.
 
-
+# Model-related views
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -132,3 +133,18 @@ class DischargeViewSet(viewsets.ModelViewSet):
     queryset = Discharge.objects.all()
     serializer_class = DischargeSerializer
     permission_classes = [IsAdminUser]
+
+
+def home_view(request, *args, **kwargs):
+    context = {
+        "title": "Home Page",
+        "list": [1, 2, 3, 4, 5],
+    }
+    return render(request, "home.html", context)
+
+
+def test_view(request, *args, **kwargs):
+    context = {
+        "title": "Test Page"
+    }
+    return render(request, "test.html", context)

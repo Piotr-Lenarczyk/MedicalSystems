@@ -139,6 +139,7 @@ class AdvancedModelTestCase(TestCase):
     def testVisitDeletion(self):
         """Newly created Visit is deleted successfully; trying to query for it raises DoesNotExist exception"""
         Visit.objects.get(id=1).delete()
+        # noinspection PyUnresolvedReferences
         try:
             Visit.objects.get(id=1)
         except Visit.DoesNotExist:
@@ -155,7 +156,7 @@ class PermissionTestCase(TestCase):
         address = Address.objects.create(street='Street', house_number=10, apartment_number=20,
                                          city='Opole', postal_code='11-111', state='Upper Silesia', country=country)
         address2 = Address.objects.create(street='Street2', house_number=20, apartment_number=34,
-                                         city='Warsaw', postal_code='00-890', state='Masovian', country=country)
+                                          city='Warsaw', postal_code='00-890', state='Masovian', country=country)
         User.objects.create_superuser('admin', 'admin@admin.com', 'password')
         user1 = User.objects.create_user('user1', 'email1@email.com', 'password', first_name='Doctor', last_name='One',
                                          is_doctor=True, is_patient=False)
@@ -251,6 +252,6 @@ class PermissionTestCase(TestCase):
         response = client.get('/api/doctors/1/')
         self.assertEqual(response.status_code, 403)
         response = client.post('/api/recommendations/', {'result_id': 4, 'target_patient': 1, 'subject': 'Subject4',
-                                                 'description': 'Yet again, another test'})
+                                                         'description': 'Yet again, another test'})
         self.assertEqual(response.status_code, 403)
         client.logout()
