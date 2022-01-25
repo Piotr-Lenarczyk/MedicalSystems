@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
 <p>Hello, {{request.user.username}}!</p>
-<p>Medication List</p>
+{% include 'home_button.html' %}
+<p>Your discharge</p>
+<p>Medications:</p>
 <table border="1px solid black" style="width:50%">
     <th>Name</th>
     <th>Dose In Milligrams</th>
@@ -14,7 +16,7 @@
     </tr>
     {% endfor %}
 </table>
-<p>Illnesses List</p>
+<p>Detected illnesses:</p>
 <table border="1px solid black" style="width:50%">
     <th>Name</th>
     {% for item in illnesses %}
@@ -23,7 +25,7 @@
     </tr>
     {% endfor %}
 </table>
-<p>Recommendation List</p>
+<p>Recommendations:</p>
 <table border="1px solid black" style="width:50%">
     <th>Patient</th>
     <th>Subject</th>

@@ -27,7 +27,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ('url', 'email', 'first_name', 'last_name', 'password', 'profile', 'is_doctor', 'is_patient')
+        fields = ('url', 'username', 'email', 'first_name', 'last_name', 'password', 'profile', 'is_doctor', 'is_patient')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -43,6 +43,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         profile_data = validated_data.pop('profile')
         profile = instance.profile
 
+        instance.username = validated_data.get('email', instance.username)
         instance.email = validated_data.get('email', instance.email)
         instance.save()
 

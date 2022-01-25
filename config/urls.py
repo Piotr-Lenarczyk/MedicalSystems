@@ -44,6 +44,12 @@ urlpatterns = [
     path('doctor/recommendations/', doctor_recommendation_view),
     path('doctor/prescriptions/', doctor_prescription_view),
     path('doctor/patient_states/', doctor_patient_states_view),
-    path('doctor/patient_illnesses/', admin_patient_illnesses_view),
+    path('doctor/patient_illnesses/', doctor_patient_illnesses_view),
     path('patient/discharges/', patient_discharge_view),
+    path('patient/visits/', patient_visit_view),
+    path('patient/book_visit/', patient_visit_create_view),
+    path('doctor/create_recommendation/', doctor_recommendation_create_view),
+    path('doctor/create_prescription/', doctor_medication_create_view),
+    path('doctor/register_state/', doctor_state_create_view),
+    path('doctor/register_illness/', doctor_illness_create_view),
 ]

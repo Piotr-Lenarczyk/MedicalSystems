@@ -1,23 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
 <p>Hello, {{request.user.username}}!</p>
+{% include 'home_button.html' %}
 <p>Patient States List</p>
-<table border="1px solid black" style="width:50%">
-    <th>Patient ID</th>
-    {% for item in model %}
-    <tr>
-        <td>{{item.patient_id.id}}</td>
-    </tr>
-    {% endfor %}
-</table>
-<p>State List</p>
 <table border="1px solid black" style="width:50%">
     <th>Systolic Blood Pressure</th>
     <th>Diastolic Blood Pressure</th>
     <th>Heart Rate</th>
     <th>Blood Oxygen Level</th>
     <th>Measurement Time</th>
-    <th>Related to patient state</th>
+    <th>Related to patient ID</th>
     {% for item in states %}
     <tr>
         <td>{{item.systolic_blood_pressure}}</td>

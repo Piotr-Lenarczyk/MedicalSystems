@@ -6,6 +6,7 @@ from rest_framework.permissions import AllowAny
 from api.models import *
 from api.serializers import *
 from api.permissions import *
+from api.forms import *
 
 
 # Create your views here.
@@ -135,6 +136,7 @@ class DischargeViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminUser]
 
 
+# Frontend views
 def home_view(request, *args, **kwargs):
     privilege_level = ""
     if not request.user.is_authenticated:
@@ -362,3 +364,66 @@ def patient_discharge_view(request, *args, **kwargs):
         "recommendations": recommendations,
     }
     return render(request, "patient/discharges.html", context)
+
+
+def patient_visit_view(request, *args, **kwargs):
+    data = Visit.objects.filter(visited_patient__email=request.user.email)
+    context = {
+        "model": data,
+    }
+    return render(request, "patient/visits.html", context)
+
+
+def patient_visit_create_view(request):
+    form = PatientVisitForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        form = PatientVisitForm(request.POST or None)
+    context = {
+        "form": form
+    }
+    return render(request, "patient/visit_create.html", context)
+
+
+def doctor_recommendation_create_view(request):
+    form = DoctorRecommendationForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        form = DoctorRecommendationForm(request.POST or None)
+    context = {
+        "form": form
+    }
+    return render(request, "doctor/recommendation_create.html", context)
+
+
+def doctor_medication_create_view(request):
+    form = DoctorMedicationForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        form = DoctorMedicationForm(request.POST or None)
+    context = {
+        "form": form
+    }
+    return render(request, "doctor/prescription_create.html", context)
+
+
+def doctor_state_create_view(request):
+    form = DoctorStateForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        form = DoctorStateForm(request.POST or None)
+    context = {
+        "form": form
+    }
+    return render(request, "doctor/state_register.html", context)
+
+
+def doctor_illness_create_view(request):
+    form = DoctorIllnessForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        form = DoctorIllnessForm(request.POST or None)
+    context = {
+        "form": form
+    }
+    return render(request, "doctor/illness_register.html", context)

@@ -2,18 +2,14 @@
 {% block content %}
 <p>Hello, {{request.user.username}}!</p>
 {% include 'home_button.html' %}
-<p>Medication List</p>
+<p>Patient Illnesses List</p>
 <table border="1px solid black" style="width:50%">
     <th>Related to patient ID</th>
     <th>Name</th>
-    <th>Dose In Milligrams</th>
-    <th>Daily Dosage</th>
-    {% for item in medications %}
+    {% for item in illnesses %}
     <tr>
-        <td>{{item.to_prescription.patient_id.id}}</td>
+        <td>{{item.to_patient_illness.patient_id.id}}</td>
         <td>{{item.name}}</td>
-        <td>{{item.dose_in_milligrams}}</td>
-        <td>{{item.dosage_daily}}</td>
     </tr>
     {% endfor %}
 </table>

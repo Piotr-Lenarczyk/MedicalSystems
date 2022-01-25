@@ -87,7 +87,7 @@ class Visit(models.Model):
     required_specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE, unique=False, null=True,
                                                 blank=True)
     leading_doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, unique=False, null=True, blank=True)
-    fee = models.FloatField(default=0.0)
+    fee = models.FloatField(default=50.0)
     objects = models.Manager()
 
     class Meta:

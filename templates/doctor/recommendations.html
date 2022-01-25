@@ -1,18 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
 <p>Hello, {{request.user.username}}!</p>
+{% include 'home_button.html' %}
 <p>Recommendation List</p>
 <table border="1px solid black" style="width:50%">
-    <th>Patient</th>
+    <th>Related to patient ID</th>
     <th>Subject</th>
     <th>Description</th>
-    <th>Related to discharge</th>
     {% for item in model %}
     <tr>
-        <td>{{item.target_patient.email.id}}</td>
+        <td>{{item.to_discharge.patient_id.id}}</td>
         <td>{{item.subject}}</td>
         <td>{{item.description}}</td>
-        <td>{{item.to_discharge.id}}</td>
     </tr>
     {% endfor %}
 </table>
