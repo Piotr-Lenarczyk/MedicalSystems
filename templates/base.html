@@ -1,12 +1,23 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Django Web Application</title>
+        <title>E-Hospital</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}"/>
     </head>
     <body>
+        <div class="title-bar">
+            <img class="inside-title" src="https://www.clipartmax.com/png/middle/106-1069920_ehospital-systems-hospital-management-software-e-hospital-logo.png" width="90px" height="60px">
+            <p class="inside-title system-name">e-Hospital</p>
+            {% if not request.user.is_authenticated %}
+                <p class="inside-title auth login-view"><a class="auth-link" href="http://127.0.0.1:8000/api/auth/login/?next=/home/">Log in</a></p>
+            {% else %}
+                <p class="inside-title greeting logged-in-view">Hello, {{request.user.username}}!</p>
+                <p class="inside-title auth"><a class="auth-link" href="http://127.0.0.1:8000/api/auth/logout/?next=/home/">Log out</a></p>
+            {% endif %}
+        </div>
         {% block content %}
-        Replace This!
         {% endblock content %}
     </body>
 </html>

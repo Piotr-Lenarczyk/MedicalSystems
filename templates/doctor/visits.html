@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
-<p>Hello, {{request.user.username}}!</p>
+<br>
+<br>
 {% include 'home_button.html' %}
-<p>Visit List</p>
-<table border="1px solid black" style="width:50%">
+<p class="list-data">Visit List</p>
+<table>
     <th>Patient ID</th>
     <th>Data</th>
     <th>Time</th>
@@ -15,7 +16,7 @@
         <td>{{item.visited_patient.id}}</td>
         <td>{{item.date}}</td>
         <td>{{item.time}}</td>
-        <td>{{item.location.postal_code}}</td>
+        <td>{{item.location.city}}</td>
         <td>{{item.required_specialization.name}}</td>
         <td>{{item.fee}}</td>
     </tr>

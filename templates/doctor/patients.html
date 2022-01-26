@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
-<p>Hello, {{request.user.username}}!</p>
+<br>
+<br>
 {% include 'home_button.html' %}
-<p>Patient List</p>
-<table border="1px solid black" style="width:50%">
+<p class="list-data">Patient List</p>
+<table>
     <th>Patient ID</th>
     <th>Title</th>
     <th>Date of Admission</th>

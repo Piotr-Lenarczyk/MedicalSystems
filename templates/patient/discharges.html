@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
-<p>Hello, {{request.user.username}}!</p>
+<br>
+<br>
 {% include 'home_button.html' %}
-<p>Your discharge</p>
-<p>Medications:</p>
-<table border="1px solid black" style="width:50%">
+<p class="list-data">Your discharge:</p>
+<br>
+<p class="list-data">Medications:</p>
+<table>
     <th>Name</th>
     <th>Dose In Milligrams</th>
     <th>Daily Dosage</th>
@@ -16,8 +18,9 @@
     </tr>
     {% endfor %}
 </table>
-<p>Detected illnesses:</p>
-<table border="1px solid black" style="width:50%">
+<br>
+<p class="list-data">Detected illnesses:</p>
+<table>
     <th>Name</th>
     {% for item in illnesses %}
     <tr>
@@ -25,14 +28,13 @@
     </tr>
     {% endfor %}
 </table>
-<p>Recommendations:</p>
-<table border="1px solid black" style="width:50%">
-    <th>Patient</th>
+<br>
+<p class="list-data">Recommendations:</p>
+<table>
     <th>Subject</th>
     <th>Description</th>
     {% for item in recommendations %}
     <tr>
-        <td>{{item.target_patient.email.id}}</td>
         <td>{{item.subject}}</td>
         <td>{{item.description}}</td>
     </tr>

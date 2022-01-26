@@ -1,0 +1,119 @@
+body {
+    background-color: #f2f2f2;
+}
+
+.title-bar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: left;
+    align-items: center;
+    background-color: black;
+}
+
+.inside-title {
+    margin-left: 1%;
+    color: white;
+}
+
+.login-view {
+    margin-left: 83%;
+}
+
+.logged-in-view {
+    margin-left: 75%;
+}
+
+.system-name {
+    font-size: 22px;
+}
+
+table, th, td {
+    background-color: inherit;
+    border: 1px solid black;
+}
+
+table {
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    border-collapse: collapse;
+    text-align: center;
+    vertical-align: middle;
+}
+
+th {
+    font-weight: bold;
+    border-right-style: hidden;
+    border-left-style: hidden;
+    padding: 10px 0px 10px 0px;
+}
+
+td {
+    border-right-style: hidden;
+    border-left-style: hidden;
+    padding: 5px 0px 5px 0px;
+}
+
+input[type=submit] {
+    margin-left: 5%;
+    padding: 6px 10px;
+    background-color: blue;
+    border-radius: 7px;
+    color: white;
+    font-size: 17px;
+}
+
+.auth {
+    padding: 6px 10px;
+    background-color: blue;
+    border-radius: 7px;
+    color: white;
+    font-size: 17px;
+}
+
+.auth-link:link, .auth-link:visited, .auth-link:hover, .auth-link:focus, .auth-link:active{
+    color: white;
+}
+
+.list-data {
+    margin-left: 5%;
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.greeting {
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+}
+
+.function-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.function {
+    border: 2px solid black;
+    border-radius: 5px;
+    width: 40%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    text-align: center;
+    font-size: 20px
+}
+
+.function-choice {
+    text-align: center;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.function-view:link, .function-view:visited, .function-view:hover, .function-view:focus, .function-view:active{
+    color: blue;
+}

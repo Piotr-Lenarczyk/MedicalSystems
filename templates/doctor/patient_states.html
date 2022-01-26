@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
-<p>Hello, {{request.user.username}}!</p>
+<br>
+<br>
 {% include 'home_button.html' %}
-<p>Patient States List</p>
-<table border="1px solid black" style="width:50%">
+<p class="list-data">Patient States List</p>
+<table>
     <th>Systolic Blood Pressure</th>
     <th>Diastolic Blood Pressure</th>
     <th>Heart Rate</th>

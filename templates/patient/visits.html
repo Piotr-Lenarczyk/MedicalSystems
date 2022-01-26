@@ -1,20 +1,21 @@
 {% extends 'base.html' %}
 {% block content %}
-<p>Hello, {{request.user.username}}!</p>
+<br>
+<br>
 {% include 'home_button.html' %}
-<p>Your visits:</p>
-<table border="1px solid black" style="width:50%">
-    <th>Data</th>
+<p class="list-data">Your visits:</p>
+<table>
     <th>Time</th>
+    <th>Date</th>
     <th>Location</th>
     <th>Specialization</th>
     <th>Doctor ID</th>
     <th>Fee</th>
     {% for item in model %}
     <tr>
-        <td>{{item.date}}</td>
         <td>{{item.time}}</td>
-        <td>{{item.location.postal_code}}</td>
+        <td>{{item.date}}</td>
+        <td>{{item.location.city}}</td>
         <td>{{item.required_specialization.name}}</td>
         <td>{{item.leading_doctor.id}}</td>
         <td>{{item.fee}}</td>
