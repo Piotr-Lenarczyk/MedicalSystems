@@ -375,55 +375,70 @@ def patient_visit_view(request, *args, **kwargs):
 
 
 def patient_visit_create_view(request):
-    form = PatientVisitForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        form = PatientVisitForm(request.POST or None)
+    form = RawPatientVisitForm()
+    if request.method == "POST":
+        form = RawPatientVisitForm(request.POST)
+        if form.is_valid():
+            Visit.objects.create(**form.cleaned_data)
+        else:
+            print(form.errors)
     context = {
-        "form": form
+        "form": form,
     }
     return render(request, "patient/visit_create.html", context)
 
 
 def doctor_recommendation_create_view(request):
-    form = DoctorRecommendationForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        form = DoctorRecommendationForm(request.POST or None)
+    form = RawDoctorRecommendationForm()
+    if request.method == "POST":
+        form = RawDoctorRecommendationForm(request.POST)
+        if form.is_valid():
+            Recommendation.objects.create(**form.cleaned_data)
+        else:
+            print(form.errors)
     context = {
-        "form": form
+        "form": form,
     }
     return render(request, "doctor/recommendation_create.html", context)
 
 
 def doctor_medication_create_view(request):
-    form = DoctorMedicationForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        form = DoctorMedicationForm(request.POST or None)
+    form = RawDoctorMedicationForm()
+    if request.method == "POST":
+        form = RawDoctorMedicationForm(request.POST)
+        if form.is_valid():
+            Medication.objects.create(**form.cleaned_data)
+        else:
+            print(form.errors)
     context = {
-        "form": form
+        "form": form,
     }
     return render(request, "doctor/prescription_create.html", context)
 
 
 def doctor_state_create_view(request):
-    form = DoctorStateForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        form = DoctorStateForm(request.POST or None)
+    form = RawDoctorStateForm()
+    if request.method == "POST":
+        form = RawDoctorStateForm(request.POST)
+        if form.is_valid():
+            State.objects.create(**form.cleaned_data)
+        else:
+            print(form.errors)
     context = {
-        "form": form
+        "form": form,
     }
     return render(request, "doctor/state_register.html", context)
 
 
 def doctor_illness_create_view(request):
-    form = DoctorIllnessForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        form = DoctorIllnessForm(request.POST or None)
+    form = RawDoctorIllnessForm()
+    if request.method == "POST":
+        form = RawDoctorIllnessForm(request.POST)
+        if form.is_valid():
+            Illness.objects.create(**form.cleaned_data)
+        else:
+            print(form.errors)
     context = {
-        "form": form
+        "form": form,
     }
     return render(request, "doctor/illness_register.html", context)

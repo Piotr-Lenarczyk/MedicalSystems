@@ -8,26 +8,38 @@ class PatientVisitForm(forms.ModelForm):
         fields = ['visited_patient', 'date', 'time', 'location', 'required_specialization', 'leading_doctor']
 
 
-class DoctorRecommendationForm(forms.ModelForm):
-    class Meta:
-        model = Recommendation
-        fields = ['target_patient', 'subject', 'description', 'to_discharge']
+class RawPatientVisitForm(forms.Form):
+    visited_patient = forms.ModelChoiceField(queryset=Patient.objects.all())
+    date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
+    location = forms.ModelChoiceField(queryset=Address.objects.all())
+    required_specialization = forms.ModelChoiceField(queryset=Specialization.objects.all())
+    leading_doctor = forms.ModelChoiceField(queryset=Doctor.objects.all())
 
 
-class DoctorMedicationForm(forms.ModelForm):
-    class Meta:
-        model = Medication
-        fields = ['name', 'dose_in_milligrams', 'dosage_daily', 'to_prescription']
+class RawDoctorRecommendationForm(forms.Form):
+    target_patient = forms.ModelChoiceField(queryset=Patient.objects.all())
+    subject = forms.CharField()
+    description = forms.CharField(widget=forms.Textarea())
+    to_discharge = forms.ModelChoiceField(queryset=Discharge.objects.all())
 
 
-class DoctorStateForm(forms.ModelForm):
-    class Meta:
-        model = State
-        fields = ['systolic_blood_pressure', 'diastolic_blood_pressure', 'heart_rate', 'blood_oxygen_level',
-                  'to_patient_state']
+class RawDoctorMedicationForm(forms.Form):
+    name = forms.CharField()
+    dose_in_milligrams = forms.DecimalField()
+    dosage_daily = forms.DecimalField()
+    to_prescription = forms.ModelChoiceField(queryset=Prescription.objects.all())
 
 
-class DoctorIllnessForm(forms.ModelForm):
-    class Meta:
-        model = Illness
-        fields = ['patient_id', 'name', 'to_patient_illness']
+class RawDoctorStateForm(forms.Form):
+    systolic_blood_pressure = forms.DecimalField()
+    diastolic_blood_pressure = forms.DecimalField()
+    heart_rate = forms.DecimalField()
+    blood_oxygen_level = forms.DecimalField()
+    to_patient_state = forms.ModelChoiceField(queryset=PatientStates.objects.all())
+
+
+class RawDoctorIllnessForm(forms.Form):
+    patient_id = forms.ModelChoiceField(queryset=Patient.objects.all())
+    name = forms.CharField()
+    to_patient_illness = forms.ModelChoiceField(queryset=PatientIllnesses.objects.all())

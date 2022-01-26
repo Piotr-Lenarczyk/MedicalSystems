@@ -29,6 +29,9 @@ class Address(models.Model):
     class Meta:
         ordering = ['id']
 
+    def __str__(self):
+        return str(self.city)
+
 
 class User(AbstractUser):
     username = models.CharField(blank=True, null=True, max_length=30)
@@ -58,6 +61,9 @@ class Specialization(models.Model):
     class Meta:
         ordering = ['id']
 
+    def __str__(self):
+        return str(self.name)
+
 
 class Doctor(models.Model):
     email = models.OneToOneField(User, on_delete=models.CASCADE, to_field='email')
@@ -66,6 +72,9 @@ class Doctor(models.Model):
 
     class Meta:
         ordering = ['id']
+
+    def __str__(self):
+        return str(self.id)
 
 
 class Patient(models.Model):
@@ -77,6 +86,9 @@ class Patient(models.Model):
 
     class Meta:
         ordering = ['id']
+
+    def __str__(self):
+        return str(self.id)
 
 
 class Visit(models.Model):
@@ -101,6 +113,9 @@ class Discharge(models.Model):
     class Meta:
         ordering = ['id']
 
+    def __str__(self):
+        return str(self.patient_id)
+
 
 class Recommendation(models.Model):
     target_patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
@@ -123,6 +138,9 @@ class Prescription(models.Model):
     class Meta:
         ordering = ['id']
 
+    def __str__(self):
+        return str(self.patient_id)
+
 
 class Medication(models.Model):
     name = models.CharField(max_length=50, verbose_name='Medication name')
@@ -141,6 +159,9 @@ class PatientStates(models.Model):
 
     class Meta:
         ordering = ['id']
+
+    def __str__(self):
+        return str(self.patient_id)
 
 
 class State(models.Model):
@@ -167,6 +188,9 @@ class PatientIllnesses(models.Model):
 
     class Meta:
         ordering = ['id']
+
+    def __str__(self):
+        return str(self.patient_id)
 
 
 class Illness(models.Model):

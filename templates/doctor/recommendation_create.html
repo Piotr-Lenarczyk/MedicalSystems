@@ -3,7 +3,7 @@
 <br>
 <br>
 {% include 'home_button.html' %}
-<p>Create a prescription:</p>
+<p>Create a recommendation:</p>
 <form method="post"> {% csrf_token %}
     {{form.as_p}}
     <input type="submit" value="Create">
